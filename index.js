@@ -54,6 +54,46 @@ function getWinner(field) {
     return EMPTY;
 }
 
+function getWinnerCells(field) {
+    let size = field.length;
+
+    // Проверка строк
+    for (let i = 0; i < size; i++) {
+        if (field[i][0] === EMPTY) continue;
+        let cells = field[i].map((_, x) => [i, x]);
+        if (cells.every(([y, x]) => field[y][x] === field[i][0])) {
+            return cells;
+        }
+    }
+
+    // Проверка столбцов
+    for (let j = 0; j < size; j++) {
+        if (field[0][j] === EMPTY) continue;
+        let cells = field.map((_, y) => [y, j]);
+        if (cells.every(([y, x]) => field[y][x] === field[0][j])) {
+            return cells;
+        }
+    }
+
+    // Проверка главной диагонали
+    if (field[0][0] !== EMPTY) {
+        let cells = field.map((_, i) => [i, i]);
+        if (cells.every(([y, x]) => field[y][x] === field[0][0])) {
+            return cells;
+        }
+    }
+
+    // Проверка побочной диагонали
+    if (field[0][size - 1] !== EMPTY) {
+        let cells = field.map((_, i) => [i, size - 1 - i]);
+        if (cells.every(([y, x]) => field[y][x] === field[0][size - 1])) {
+            return cells;
+        }
+    }
+
+    return null;
+}
+
 function isFieldFull(field) {
     for (let i = 0; i < field.length; i++) {
         if (field[i].includes(EMPTY)) {
