@@ -10,7 +10,7 @@ let currentPlayer = CROSS;
 function makeFild(size){
     let field = [];
     for (let i = 0; i < size; i ++) {
-        field.push([])
+        field.push([]);
         for (let j = 0; j < size; j ++) {
             field[i].push(EMPTY);
         }
@@ -78,13 +78,21 @@ function renderGrid (dimension) {
 }
 
 function cellClickHandler (row, col) {
-    // Пиши код тут
-    console.log(`Clicked on cell: ${row}, ${col}`);
+    if (field[row][col] === EMPTY) {
+        renderSymbolInCell(currentPlayer, row, col);
+        currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
 
+<<<<<<< HEAD
     if ()
     /* Пользоваться методом для размещения символа в клетке так:
         renderSymbolInCell(ZERO, row, col);
      */
+=======
+        console.log(`Clicked on cell: ${row}, ${col}`);
+    } else {
+        console.log(`Cell ${row}, ${col} is already occupied!`);
+    }
+>>>>>>> 7f17d7fea363f16349d23882fd3a0d07327fc824
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
