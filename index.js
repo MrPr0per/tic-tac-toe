@@ -4,10 +4,10 @@ const EMPTY = ' ';
 
 const container = document.getElementById('fieldWrapper');
 
-let field = makeFild(3);
+let field = makeField(3);
 let currentPlayer = CROSS;
 
-function makeFild(size){
+function makeField(size){
     let field = [];
     for (let i = 0; i < size; i ++) {
         field.push([]);
@@ -18,6 +18,43 @@ function makeFild(size){
     return field;
 }
 
+function getWinner(field) {
+    // возвращает CROSS или ZERO, если победил кто то из них
+    // возвращает EMPTY, если никто не победил
+    let size = field.length;
+
+    // Проверка строк
+    for (let i = 0; i < size; i++) {
+        if (field[i][0] !== EMPTY && field[i].every(cell => cell === field[i][0])) {
+            return field[i][0];
+        }
+    }
+
+    // Проверка колонок
+    for (let i = 0; i < size; i++) {
+        if (column[0] !== EMPTY && field
+            .map(row => row[i])
+            .every(cell => cell === column[0])) {
+            return column[0];
+        }
+    }
+
+    // Проверка главной диагонали
+    if (mainDiagonal[0] !== EMPTY && field
+        .map((row, index) => row[index])
+        .every(cell => cell === mainDiagonal[0])) {
+        return mainDiagonal[0];
+    }
+
+    // Проверка побочной диагонали
+    if (secondaryDiagonal[0] !== EMPTY && field
+        .map((row, index) => row[size - 1 - index])
+        .every(cell => cell === secondaryDiagonal[0])) {
+        return secondaryDiagonal[0];
+    }
+
+    return EMPTY;
+}
 startGame();
 addResetListener();
 
