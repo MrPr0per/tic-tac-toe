@@ -4,6 +4,20 @@ const EMPTY = ' ';
 
 const container = document.getElementById('fieldWrapper');
 
+let field = makeFild();
+let currentPlayer = CROSS;
+
+function makeFild(size){
+    let field = [];
+    for (let i = 0; i < size; i ++) {
+        field.push([])
+        for (let j = 0; j < size; j ++) {
+            field[i].push[EMPTY]
+        }
+    }
+    return field;
+}
+
 startGame();
 addResetListener();
 
