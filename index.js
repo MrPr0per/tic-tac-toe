@@ -6,6 +6,7 @@ const container = document.getElementById('fieldWrapper');
 
 let field = makeField(3);
 let currentPlayer = CROSS;
+let isGameFinished = false;
 
 function makeField(size) {
     let field = [];
@@ -53,6 +54,15 @@ function getWinner(field) {
     return EMPTY;
 }
 
+function isFieldFull(field) {
+    for (let i = 0; i < field.length; i++) {
+        if (field[i].includes(EMPTY)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 startGame();
 addResetListener();
 
@@ -76,34 +86,28 @@ function renderGrid(dimension) {
 }
 
 function cellClickHandler(row, col) {
-    if (field[row][col] === EMPTY) {
-        renderSymbolInCell(currentPlayer, row, col);
-        field[row][col] = currentPlayer;
-        currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
-        console.log(`Clicked on cell: ${row}, ${col}`);
-
-        const winner = getWinner(field)
-        if (winner === EMPTY && isFieldFull(field)) {
-            alert("Победила дружба!")
-            return
-        }
-        if (winner !== EMPTY) {
-            alert(`победили ${winner === CROSS ? 'крестики' : 'нолики'}`)
-            return
-        }
-
-    } else {
+    if (field[row][col] !== EMPTY) {
         console.log(`Cell ${row}, ${col} is already occupied!`);
+        return;
     }
-}
+    if (isGameFinished) return;
 
-function isFieldFull(field) {
-    for (let i = 0; i < field.length; i++) {
-        if (field[i].includes(EMPTY)) {
-            return false;
-        }
+    renderSymbolInCell(currentPlayer, row, col);
+    field[row][col] = currentPlayer;
+    currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
+    console.log(`Clicked on cell: ${row}, ${col}`);
+
+    const winner = getWinner(field)
+    if (winner === EMPTY && isFieldFull(field)) {
+        alert("Победила дружба!")
+        isGameFinished = true;
+        return
     }
-    return true;
+    if (winner !== EMPTY) {
+        alert(`победили ${winner === CROSS ? 'крестики' : 'нолики'}`)
+        isGameFinished = true;
+        return
+    }
 }
 
 function renderSymbolInCell(symbol, row, col, color = '#333') {
@@ -131,6 +135,8 @@ function resetClickHandler() {
         }
     }
     console.log('reset!');
+    isGameFinished = false;
+    currentPlayer = CROSS;
 }
 
 
