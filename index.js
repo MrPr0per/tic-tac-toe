@@ -4,10 +4,10 @@ const EMPTY = ' ';
 
 const container = document.getElementById('fieldWrapper');
 
-let field = makeFild(3);
+let field = makeField(3);
 let currentPlayer = CROSS;
 
-function makeFild(size){
+function makeField(size){
     let field = [];
     for (let i = 0; i < size; i ++) {
         field.push([]);
@@ -53,7 +53,7 @@ function getWinner(field) {
         return secondaryDiagonal[0];
     }
 
-    return EMPTY; 
+    return EMPTY;
 }
 startGame();
 addResetListener();
@@ -80,19 +80,25 @@ function renderGrid (dimension) {
 function cellClickHandler (row, col) {
     if (field[row][col] === EMPTY) {
         renderSymbolInCell(currentPlayer, row, col);
+        field[row][col] = currentPlayer;
         currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
-
-<<<<<<< HEAD
-    if ()
-    /* Пользоваться методом для размещения символа в клетке так:
-        renderSymbolInCell(ZERO, row, col);
-     */
-=======
         console.log(`Clicked on cell: ${row}, ${col}`);
+
+        if (isFieldFull(field)) {
+            alert("Победила дружба!")
+        }
     } else {
         console.log(`Cell ${row}, ${col} is already occupied!`);
     }
->>>>>>> 7f17d7fea363f16349d23882fd3a0d07327fc824
+}
+
+function isFieldFull (field) {
+    for (let i = 0; i < field.length; i ++) {
+        if (field[i].includes(EMPTY)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
