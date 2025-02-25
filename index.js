@@ -7,11 +7,11 @@ const container = document.getElementById('fieldWrapper');
 let field = makeField(3);
 let currentPlayer = CROSS;
 
-function makeField(size){
+function makeField(size) {
     let field = [];
-    for (let i = 0; i < size; i ++) {
+    for (let i = 0; i < size; i++) {
         field.push([]);
-        for (let j = 0; j < size; j ++) {
+        for (let j = 0; j < size; j++) {
             field[i].push(EMPTY);
         }
     }
@@ -31,38 +31,36 @@ function getWinner(field) {
     }
 
     // Проверка колонок
-    for (let i = 0; i < size; i++) {
-        if (column[0] !== EMPTY && field
-            .map(row => row[i])
-            .every(cell => cell === column[0])) {
+    for (let j = 0; j < size; j++) {
+        let column = field.map(row => row[j]);
+        if (column[0] !== EMPTY && column.every(cell => cell === column[0])) {
             return column[0];
         }
     }
 
     // Проверка главной диагонали
-    if (mainDiagonal[0] !== EMPTY && field
-        .map((row, index) => row[index])
-        .every(cell => cell === mainDiagonal[0])) {
+    let mainDiagonal = field.map((row, index) => row[index]);
+    if (mainDiagonal[0] !== EMPTY && mainDiagonal.every(cell => cell === mainDiagonal[0])) {
         return mainDiagonal[0];
     }
 
     // Проверка побочной диагонали
-    if (secondaryDiagonal[0] !== EMPTY && field
-        .map((row, index) => row[size - 1 - index])
-        .every(cell => cell === secondaryDiagonal[0])) {
+    let secondaryDiagonal = field.map((row, index) => row[size - 1 - index]);
+    if (secondaryDiagonal[0] !== EMPTY && secondaryDiagonal.every(cell => cell === secondaryDiagonal[0])) {
         return secondaryDiagonal[0];
     }
 
     return EMPTY;
 }
+
 startGame();
 addResetListener();
 
-function startGame () {
+function startGame() {
     renderGrid(3);
 }
 
-function renderGrid (dimension) {
+function renderGrid(dimension) {
     container.innerHTML = '';
 
     for (let i = 0; i < dimension; i++) {
@@ -77,23 +75,30 @@ function renderGrid (dimension) {
     }
 }
 
-function cellClickHandler (row, col) {
+function cellClickHandler(row, col) {
     if (field[row][col] === EMPTY) {
         renderSymbolInCell(currentPlayer, row, col);
         field[row][col] = currentPlayer;
         currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
         console.log(`Clicked on cell: ${row}, ${col}`);
 
-        if (isFieldFull(field)) {
+        const winner = getWinner(field)
+        if (winner === EMPTY && isFieldFull(field)) {
             alert("Победила дружба!")
+            return
         }
+        if (winner !== EMPTY) {
+            alert(`победили ${winner === CROSS ? 'крестики' : 'нолики'}`)
+            return
+        }
+
     } else {
         console.log(`Cell ${row}, ${col} is already occupied!`);
     }
 }
 
-function isFieldFull (field) {
-    for (let i = 0; i < field.length; i ++) {
+function isFieldFull(field) {
+    for (let i = 0; i < field.length; i++) {
         if (field[i].includes(EMPTY)) {
             return false;
         }
@@ -101,31 +106,32 @@ function isFieldFull (field) {
     return true;
 }
 
-function renderSymbolInCell (symbol, row, col, color = '#333') {
+function renderSymbolInCell(symbol, row, col, color = '#333') {
     const targetCell = findCell(row, col);
 
     targetCell.textContent = symbol;
     targetCell.style.color = color;
 }
 
-function findCell (row, col) {
+function findCell(row, col) {
     const targetRow = container.querySelectorAll('tr')[row];
     return targetRow.querySelectorAll('td')[col];
 }
 
-function addResetListener () {
+function addResetListener() {
     const resetButton = document.getElementById('reset');
     resetButton.addEventListener('click', resetClickHandler);
 }
 
-function resetClickHandler () {
+function resetClickHandler() {
     console.log('reset!');
 }
 
 
 /* Test Function */
+
 /* Победа первого игрока */
-function testWin () {
+function testWin() {
     clickOnCell(0, 2);
     clickOnCell(0, 0);
     clickOnCell(2, 0);
@@ -136,7 +142,7 @@ function testWin () {
 }
 
 /* Ничья */
-function testDraw () {
+function testDraw() {
     clickOnCell(2, 0);
     clickOnCell(1, 0);
     clickOnCell(1, 1);
@@ -149,6 +155,6 @@ function testDraw () {
     clickOnCell(2, 2);
 }
 
-function clickOnCell (row, col) {
+function clickOnCell(row, col) {
     findCell(row, col).click();
 }
