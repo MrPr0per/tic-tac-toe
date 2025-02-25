@@ -43,12 +43,25 @@ function renderGrid (dimension) {
 function cellClickHandler (row, col) {
     if (field[row][col] === EMPTY) {
         renderSymbolInCell(currentPlayer, row, col);
+        field[row][col] = currentPlayer;
         currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
-
         console.log(`Clicked on cell: ${row}, ${col}`);
+
+        if (isFieldFull(field)) {
+            alert("Победила дружба!")
+        }
     } else {
         console.log(`Cell ${row}, ${col} is already occupied!`);
     }
+}
+
+function isFieldFull (field) {
+    for (let i = 0; i < field.length; i ++) {
+        if (field[i].includes(EMPTY)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
@@ -69,6 +82,12 @@ function addResetListener () {
 }
 
 function resetClickHandler () {
+    for (let row = 0; row < field.length; row++) {
+        for (let col = 0; col < field.length; col++) {
+            field[row][col] = EMPTY;
+            renderSymbolInCell(EMPTY, row, col);
+        }
+    }
     console.log('reset!');
 }
 
