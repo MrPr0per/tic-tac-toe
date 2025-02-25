@@ -4,15 +4,15 @@ const EMPTY = ' ';
 
 const container = document.getElementById('fieldWrapper');
 
-let field = makeFild();
+let field = makeFild(3);
 let currentPlayer = CROSS;
 
 function makeFild(size){
     let field = [];
     for (let i = 0; i < size; i ++) {
-        field.push([])
+        field.push([]);
         for (let j = 0; j < size; j ++) {
-            field[i].push[EMPTY]
+            field[i].push(EMPTY);
         }
     }
     return field;
@@ -41,13 +41,14 @@ function renderGrid (dimension) {
 }
 
 function cellClickHandler (row, col) {
-    // Пиши код тут
-    console.log(`Clicked on cell: ${row}, ${col}`);
+    if (field[row][col] === EMPTY) {
+        renderSymbolInCell(currentPlayer, row, col);
+        currentPlayer = currentPlayer === CROSS ? ZERO : CROSS;
 
-
-    /* Пользоваться методом для размещения символа в клетке так:
-        renderSymbolInCell(ZERO, row, col);
-     */
+        console.log(`Clicked on cell: ${row}, ${col}`);
+    } else {
+        console.log(`Cell ${row}, ${col} is already occupied!`);
+    }
 }
 
 function renderSymbolInCell (symbol, row, col, color = '#333') {
