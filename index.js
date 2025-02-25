@@ -124,6 +124,12 @@ function addResetListener() {
 }
 
 function resetClickHandler() {
+    for (let row = 0; row < field.length; row++) {
+        for (let col = 0; col < field.length; col++) {
+            field[row][col] = EMPTY;
+            renderSymbolInCell(EMPTY, row, col);
+        }
+    }
     console.log('reset!');
 }
 
